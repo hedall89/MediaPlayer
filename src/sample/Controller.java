@@ -8,23 +8,35 @@ import javafx.scene.media.*;
 import javafx.scene.control.*;
 import javafx.fxml.FXML;
 
+import sample.video.video;
+
 import java.io.*;
 import java.net.*;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable
 {
+    /*
+    public static ObservableList<String> Display_Playlists;
+    
+    private List<Playlist> Playlists;
+    */
+     
+    private List<video> Videos;
+    
     @FXML
     private MediaView mediaV;
     @FXML
-    public Button play;
+    private Button play;
     @FXML
-    public MediaPlayer mp;
-    public Media me;
+    private MediaPlayer mp;
     @FXML
-    public TextField searchfield;
+    private Media me;
     @FXML
-    private ListView<?> searchlist;
+    private TextField searchfield;
+    @FXML
+    private ListView<String> searchlist;
     @FXML
     private Button button1;
     /**
@@ -83,7 +95,8 @@ public class Controller implements Initializable
 
     }
     @FXML
-    private void handleTestButton(ActionEvent event) {
+    private void handleTestButton(ActionEvent event)
+    {
         ObservableList<String> names = FXCollections.observableArrayList(
                 "Julia", "Ian", "Sue", "Matthew", "Hannah", "Stephan", "Denise");
         ListView<String> searchlist = new ListView<String>(names);
@@ -91,6 +104,17 @@ public class Controller implements Initializable
         searchlist.setItems(names);
         System.out.println(names);
     }
+    private void SelectVideos(){
+        DB.selectSQL("SELECT fldVideoID FROM tblVideo");
+
+        do{
+            String vid = DB.getData();
+            if(vid.equals(DB.NOMOREDATA)) break;
+            Videos.add(new video(Integer.parseInt(vid)));
+        }while(true);
+    }
+
 }
+
 
 
