@@ -51,4 +51,18 @@ public class Controller implements Initializable {
         mp.play();
     }
 
+    @FXML
+
+    private void handleStop()
+    {
+        mp.stop();
+    }
+
+    @FXML
+
+    private void handlePause()
+    {
+        mp.pause();
+    }
+
 }
