@@ -1,32 +1,34 @@
 package sample;
 
+import javafx.fxml.*;
 import javafx.scene.media.*;
-import javafx.scene.control.Button;
-
+import javafx.scene.control.*;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+
 import java.io.*;
 import java.net.*;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class Controller implements Initializable
+{
     @FXML
     private MediaView mediaV;
-
     @FXML
-    private Button play;
-
-    private MediaPlayer mp;
-    private Media me;
-
-
+    public Button play;
+    @FXML
+    public MediaPlayer mp;
+    public Media me;
+    @FXML
+    public TextField searchfield;
     /**
      * This method is invoked automatically in the beginning. Used for initializing, loading data etc.
      *
      * @param location
      * @param resources
      */
-    public void initialize(URL location, ResourceBundle resources){
+    @FXML
+    public void initialize(URL location, ResourceBundle resources)
+    {
         // Build the path to the location of the media file
         String path = new File("src/sample/media/file_example_MP4_640_3MG.mp4").getAbsolutePath();
         // Create new Media object (the actual media content)
@@ -38,14 +40,12 @@ public class Controller implements Initializable {
         // mp.setAutoPlay(true);
         // If autoplay is turned of the method play(), stop(), pause() etc controls how/when medias are played
         mp.setAutoPlay(false);
-
     }
-
-    @FXML
     /**
      * Handler for the play button
      */
-    private void handlePlay()
+    @FXML
+    public void handlePlay()
     {
         // Play the mediaPlayer with the attached media
         mp.play();
@@ -65,4 +65,14 @@ public class Controller implements Initializable {
         mp.pause();
     }
 
+    @FXML
+    private void HandleSearch()
+    {
+
+
+
+
+    }
 }
+
+
