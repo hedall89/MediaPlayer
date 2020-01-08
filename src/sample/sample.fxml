@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.media.MediaView?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
       <SplitPane dividerPositions="0.29797979797979796" prefHeight="421.0" prefWidth="600.0">
          <items>
@@ -66,10 +66,9 @@
                   <MediaView fx:id="mediaV" fitHeight="200.0" fitWidth="200.0" layoutX="93.0" layoutY="48.0" />
                   <Button layoutX="375.0" layoutY="9.0" mnemonicParsing="false" text="X" />
                   <Button layoutX="351.0" layoutY="9.0" mnemonicParsing="false" text="-" />
-                  <Button layoutX="80.0" layoutY="262.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="55.0" text="Pause" />
-                  <Button layoutX="181.0" layoutY="262.0" mnemonicParsing="false" text="Play" />
-                  <Button layoutX="271.0" layoutY="262.0" mnemonicParsing="false" text="Stop" />
-                  <MediaView fitHeight="200.0" fitWidth="200.0" layoutX="87.0" layoutY="48.0" />
+                  <Button layoutX="61.0" layoutY="273.0" mnemonicParsing="false" onAction="#handlePlay" text="Play" />
+                  <Button layoutX="113.0" layoutY="273.0" mnemonicParsing="false" onAction="#handleStop" text="Stop" />
+                  <Button layoutX="167.0" layoutY="273.0" mnemonicParsing="false" onAction="#handlePause" text="Pause" />
                </children>
             </AnchorPane>
          </items>
