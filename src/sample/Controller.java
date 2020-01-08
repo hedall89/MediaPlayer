@@ -1,5 +1,8 @@
 package sample;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.media.*;
 import javafx.scene.control.*;
@@ -20,6 +23,10 @@ public class Controller implements Initializable
     public Media me;
     @FXML
     public TextField searchfield;
+    @FXML
+    private ListView<?> searchlist;
+    @FXML
+    private Button button1;
     /**
      * This method is invoked automatically in the beginning. Used for initializing, loading data etc.
      *
@@ -66,12 +73,23 @@ public class Controller implements Initializable
     }
 
     @FXML
-    private void HandleSearch()
+    /**
+     *
+     * Method to be able to search
+     * for videos by title or category
+     */
+    public void HandleSearch()
     {
 
-
-
-
+    }
+    @FXML
+    private void handleTestButton(ActionEvent event) {
+        ObservableList<String> names = FXCollections.observableArrayList(
+                "Julia", "Ian", "Sue", "Matthew", "Hannah", "Stephan", "Denise");
+        ListView<String> searchlist = new ListView<String>(names);
+        searchlist.getItems().setAll(names);
+        searchlist.setItems(names);
+        System.out.println(names);
     }
 }
 
