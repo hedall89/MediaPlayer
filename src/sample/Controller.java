@@ -39,6 +39,9 @@ public class Controller implements Initializable
     private ListView<String> searchlist;
     @FXML
     private Button button1;
+
+
+
     /**
      * This method is invoked automatically in the beginning. Used for initializing, loading data etc.
      *
@@ -60,39 +63,24 @@ public class Controller implements Initializable
         // If autoplay is turned of the method play(), stop(), pause() etc controls how/when medias are played
         mp.setAutoPlay(false);
     }
-    /**
-     * Handler for the play button
-     */
-    @FXML
-    public void handlePlay()
-    {
-        // Play the mediaPlayer with the attached media
-        mp.play();
-    }
 
     @FXML
-
+    public void handlePlay() { mp.play(); }
+    @FXML
     private void handleStop()
     {
         mp.stop();
     }
-
     @FXML
-
     private void handlePause()
     {
         mp.pause();
     }
-
     @FXML
-    /**
-     *
-     * Method to be able to search
-     * for videos by title or category
-     */
+
+
     public void HandleSearch()
     {
-
     }
     @FXML
     private void handleTestButton(ActionEvent event)
@@ -104,7 +92,8 @@ public class Controller implements Initializable
         searchlist.setItems(names);
         System.out.println(names);
     }
-    private void SelectVideos(){
+
+    private void SelectVideo(){
         DB.selectSQL("SELECT fldVideoID FROM tblVideo");
 
         do{

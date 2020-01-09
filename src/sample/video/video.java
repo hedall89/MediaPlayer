@@ -1,5 +1,11 @@
 package sample.video;
+/**
+ * Class to select a specific VIDEO straigth from the GUI, and then fetched in the DATABASE
+ * BY SQL STATEMENTS,
+ */
+
 import sample.DB;
+import sample.Controller;
 
 public class video
 {
@@ -17,16 +23,14 @@ public class video
 
     private void FetchVideos()
     {
-        DB.selectSQL("SELECT fldVideo_Name FROM tblVideo WHERE fldVideoID = "+ Vid_ID);
+        DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldVideoID = "+ Vid_ID);
         VideoName = DB.getData();
 
         DB.selectSQL("SELECT fldVideoFilepath FROM tblVideo WHERE fldVideoID = "+ Vid_ID);
         FilePath = DB.getData();
 
-        DB.selectSQL("SELECT fldVideoCategory FROM tblVideo WHERE fldVideo = "+ Vid_ID);
+        DB.selectSQL("SELECT fldCategory FROM tblVideo WHERE fldVideo = "+ Vid_ID);
         VideoCategory = DB.getData();
     }
-
-
 
 }
