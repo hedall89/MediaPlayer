@@ -4,33 +4,92 @@ package sample.video;
  * BY SQL STATEMENTS,
  */
 
+import javafx.fxml.FXML;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import sample.DB;
 import sample.Controller;
+import java.io.File;
+
 
 public class video
 {
-    private int Vid_ID;
-    private String VideoName, FilePath, VideoCategory;
+   // private static int Vid_ID;
+    private static String VideoCategory;
+    private static String VideoTitle;
 
 
-    public video(int Vid_ID)
+    private String filesource;
+    private String filepath;
+
+    private MediaPlayer mp;
+    private Media me;
+
+
+    public video(String filepath)
     {
-        this.Vid_ID = Vid_ID;
+        this.filepath = filepath;
 
-        FetchVideos();
+        String path = new File("src/sample/media/" + filepath).getAbsolutePath();
+
+        filesource = "src/sample/media/" + filepath;
+
+        me = new Media(new File(path).toURI().toString());
+
+        mp = new MediaPlayer(me);
+    }
+
+    public video() {
+
     }
 
 
-    private void FetchVideos()
-    {
-        DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldVideoID = "+ Vid_ID);
-        VideoName = DB.getData();
+    //GETTERS AND SETTERS
 
-        DB.selectSQL("SELECT fldVideoFilepath FROM tblVideo WHERE fldVideoID = "+ Vid_ID);
-        FilePath = DB.getData();
+    public static String getVideoCategory() { return VideoCategory; }
 
-        DB.selectSQL("SELECT fldCategory FROM tblVideo WHERE fldVideo = "+ Vid_ID);
+    public static void setVideoCategory(String videoCategory) { VideoCategory = videoCategory; }
+
+    public static String getVideoTitle() { return VideoTitle; }
+
+    public static void setVideoTitle(String videoTitle) { VideoTitle = videoTitle; }
+
+    public String getFilesource() { return filesource; }
+
+    public void setFilesource(String filesource) { this.filesource = filesource; }
+
+    public String getFilepath() { return filepath; }
+
+    public void setFilepath(String filepath) { this.filepath = filepath; }
+
+    public MediaPlayer getMp() { return mp; }
+
+    public void setMp(MediaPlayer mp) { this.mp = mp; }
+
+    public Media getMe() { return me; }
+
+    public void setMe(Media me) { this.me = me; }
+
+    public String getVideotitleDB(){
+        DB.selectSQL("SELECT fldVideoTitle from tblVideo WHERE fldVideoFilePath ='" + this.filepath+"'");
+        VideoTitle = DB.getData();
+        return VideoTitle;
+
+    }
+    public String getVideoCategoryDB(){
+        DB.selectSQL("SELECT fldVideoCategory from tblVideo WHERE fldVideoCategory ='" + this.filepath+"'");
         VideoCategory = DB.getData();
+        return VideoCategory;
     }
+    private static void cleardata() {
 
+
+        do {
+            String data = DB.getData();
+            if (data.equals(DB.NOMOREDATA)) {
+                break;
+            }
+
+        } while (true);
+    }
 }
