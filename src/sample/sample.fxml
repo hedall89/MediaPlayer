@@ -14,8 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.media.MediaView?>
 
-
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="294.0" minWidth="10.0" prefWidth="86.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="515.0" minWidth="10.0" prefWidth="514.0" />
@@ -30,7 +29,7 @@
       <RowConstraints maxHeight="358.0" minHeight="10.0" prefHeight="167.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <TextField alignment="CENTER" text="Search" />
+      <TextField fx:id="searchfield" alignment="CENTER" text="Search" />
       <ToggleButton mnemonicParsing="false" prefHeight="27.0" prefWidth="86.0" text="category" GridPane.rowIndex="2" />
       <ToggleButton mnemonicParsing="false" prefHeight="27.0" prefWidth="85.0" text="Category" GridPane.rowIndex="3" />
       <ToggleButton mnemonicParsing="false" prefHeight="27.0" prefWidth="86.0" text="Category" GridPane.rowIndex="1" />
@@ -54,7 +53,7 @@
             </TitledPane>
          </panes>
       </Accordion>
-      <ListView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6" />
+      <ListView fx:id="songlist" onEditCommit="#HandleSearch" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6" />
       <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
          <right>
             <Button mnemonicParsing="false" text="X" BorderPane.alignment="CENTER" />
@@ -63,7 +62,7 @@
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
          <children>
-            <MediaView fitHeight="200.0" fitWidth="200.0" layoutX="157.0" layoutY="-86.0" />
+            <MediaView fx:id="mediaV" fitHeight="200.0" fitWidth="200.0" layoutX="157.0" layoutY="-86.0" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />

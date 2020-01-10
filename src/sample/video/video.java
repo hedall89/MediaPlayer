@@ -42,8 +42,6 @@ public class video
     public video() {
 
     }
-
-
     //GETTERS AND SETTERS
 
     public static String getVideoCategory() { return VideoCategory; }
@@ -74,7 +72,6 @@ public class video
         DB.selectSQL("SELECT fldVideoTitle from tblVideo WHERE fldVideoFilePath ='" + this.filepath+"'");
         VideoTitle = DB.getData();
         return VideoTitle;
-
     }
     public String getVideoCategoryDB(){
         DB.selectSQL("SELECT fldVideoCategory from tblVideo WHERE fldVideoCategory ='" + this.filepath+"'");
@@ -82,8 +79,6 @@ public class video
         return VideoCategory;
     }
     private static void cleardata() {
-
-
         do {
             String data = DB.getData();
             if (data.equals(DB.NOMOREDATA)) {

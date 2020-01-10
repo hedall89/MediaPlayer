@@ -13,8 +13,8 @@ import java.io.*;
 import java.net.*;
 import java.util.List;
 import java.util.ResourceBundle;
-import sample.video.video;
-
+import sample.video.*;
+import sample.playlist.*;
 public class Controller implements Initializable
 {
 
@@ -29,7 +29,7 @@ public class Controller implements Initializable
     @FXML
     private Media me;
     @FXML
-    private TextField searchfield;
+    private TextField textfield;
     @FXML
     private ListView<String> searchlist;
     @FXML
@@ -56,48 +56,26 @@ public class Controller implements Initializable
         // mp.setAutoPlay(true);
         // If autoplay is turned of the method play(), stop(), pause() etc controls how/when medias are played
         mp.setAutoPlay(false);
-
-
-
         new video();
     }
-
     @FXML
     public void handlePlay() { mp.play(); }
     @FXML
     private void handleStop() { mp.stop(); }
     @FXML
     private void handlePause() { mp.pause(); }
-
     @FXML
     /**
      * Method to handle the search field in the GUI
      */
     public void HandleSearch()
     {
-
-
-
+        VideoLibrary VL = new VideoLibrary();
         //Create search by foreach loop and arraylist
         //Connect to Database, search with title or category
         loadData();
+        VL.searchForSongs(textfield, searchlist);
     }
-
-
-    /*
-    public video search(String title, String Category) // TO DO
-    {
-        for (video video1 : Videos) {
-            if (video.getVideoTitle() == title) { return video1;}
-        }
-        for (video video2 : Videos) {
-            if (video.getVideoCategory() == Category) { return video2;}
-        }
-        return null;
-    }
-
-     */
-
     private void loadData ()
     {
         list.removeAll(list);
@@ -105,20 +83,7 @@ public class Controller implements Initializable
                 "Julia", "Ian", "Sue", "Matthew", "Hannah", "Stephan", "Denise");
 
         searchlist.getItems().addAll(names);
-
     }
-    /*
-    private void SelectVideo ()
-    {
-        DB.selectSQL("SELECT fldVideoID FROM tblVideo");
-        do {
-            String vid = DB.getData();
-            if (vid.equals(DB.NOMOREDATA)) break;
-            Videos.add(new video(Integer.parseInt(vid)));
-        } while (true);
-    }
-
-     */
 }
 
 
