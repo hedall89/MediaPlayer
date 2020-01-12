@@ -1,5 +1,9 @@
 package sample;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.*;
@@ -9,6 +13,7 @@ import javafx.fxml.FXML;
 
 import sample.video.video;
 
+import java.awt.event.ActionEvent;
 import java.io.*;
 import java.net.*;
 import java.util.List;
@@ -34,6 +39,7 @@ public class Controller implements Initializable
     private ListView<String> songlist;
     @FXML
     private Button button1;
+    @FXML Slider volumeSlider;
 
     /**
      * This method is invoked automatically in the beginning. Used for initializing, loading data etc.
@@ -55,9 +61,22 @@ public class Controller implements Initializable
         // mp.setAutoPlay(true);
         // If autoplay is turned of the method play(), stop(), pause() etc controls how/when medias are played
         mp.setAutoPlay(false);
+        DoubleProperty width = mediaV.fitWidthProperty();
+        DoubleProperty height = mediaV.fitHeightProperty();
+        width.bind(Bindings.selectDouble(mediaV.sceneProperty(), "width"));
+        height.bind(Bindings.selectDouble(mediaV.sceneProperty(), "height"));
+        volumeSlider.setValue(mp.getVolume()*100);
+        volumeSlider.valueProperty().addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable)
+            {
+                mp.setVolume(volumeSlider.getValue()/100);
+            }
+        })
         new video();
         HandleSearch();
     }
+
     @FXML
     public void handlePlay() { mp.play(); }
     @FXML
@@ -68,6 +87,37 @@ public class Controller implements Initializable
     /**
      * Method to handle the search field in the GUI
      */
+    public void play(ActionEvent event)
+    {
+        mp.play();
+    }
+    public void pause (ActionEvent event)
+    {
+        mp.pause();
+    }
+    public void fast (ActionEvent event)
+    {
+        mp.setRate(2);
+    }
+    public void  slow (ActionEvent event)
+    {
+        mp.setRate(0.5);
+    }
+    public void reload(ActionEvent event)
+    {
+        mp.seek(mp.getStartTime());
+        mp.play();
+    }
+    public void start(ActionEvent event)
+    {
+        mp.seek(mp.getStartTime());
+        mp.stop();
+    }
+    public void last(ActionEvent event)
+    {
+        mp.seek(mp.getTotalDuration());
+        mp.stop();
+    }
     public void HandleSearch()
     {
         VideoLibrary VL = new VideoLibrary();
