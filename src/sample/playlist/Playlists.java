@@ -1,4 +1,7 @@
 package sample.playlist;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
 import sample.DB;
 import sample.Controller;
 
@@ -10,31 +13,19 @@ import sample.video.video;
 
 public class Playlists {
     protected String PlaylistName;
-    protected int AmountofVideos;
-   // protected ArrayList<>
+    protected int NumbersofVideos;
+    protected ArrayList<video> VideosFound = new ArrayList<video>();
 
 
-    protected void displaySelectedData() {
 
 
-        do {
-            String data = DB.getData();
-            if (data.equals(DB.NOMOREDATA)) {
-                System.out.println("NO MORE DATA");
-                break;
-            } else {
+    protected ObservableList<video> getVideos() {
+        ObservableList<video> videos = FXCollections.observableArrayList();
 
-                System.out.println("Added this song to the Song ArrayList: " + data);
+        for (int i = 0; i < VideosFound.size(); i++) {
+            videos.add(VideosFound.get(i));
+        }
+        return videos;
 
-                // WILL GIVE US THE FILENAME AND PASS IT TO THE PARAMETERS IN THE SONG OBJECT
-                video video = new video(data);
-
-
-                // WILL ADD THE SONG INCLUDING ITS PROPERTIES TO THE ARRAY LIST
-                // songsFoundArrayList.add(video);
-
-            }
-
-        } while (true);
     }
 }

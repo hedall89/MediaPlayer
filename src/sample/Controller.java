@@ -1,5 +1,4 @@
 package sample;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.*;
@@ -7,34 +6,21 @@ import javafx.scene.media.*;
 import javafx.scene.control.*;
 import javafx.fxml.FXML;
 
-import sample.video.video;
-
 import java.io.*;
 import java.net.*;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
-import sample.video.video;
 
 public class Controller implements Initializable
 {
+    @FXML private MediaView mediaV;
+    @FXML private Button play;
+    @FXML private MediaPlayer mp;
+    @FXML private Media me;
+    @FXML private TextField searchfield;
+    @FXML private ListView<String> searchlist;
 
-    ObservableList list = FXCollections.observableArrayList();
-    private static List<video> Videos;
-    @FXML
-    private MediaView mediaV;
-    @FXML
-    private Button play;
-    @FXML
-    private MediaPlayer mp;
-    @FXML
-    private Media me;
-    @FXML
-    private TextField searchfield;
-    @FXML
-    private ListView<String> searchlist;
-    @FXML
-    private Button button1;
-
+    /////////////////////////////////////////////////////
     /**
      * This method is invoked automatically in the beginning. Used for initializing, loading data etc.
      *
@@ -56,69 +42,109 @@ public class Controller implements Initializable
         // mp.setAutoPlay(true);
         // If autoplay is turned of the method play(), stop(), pause() etc controls how/when medias are played
         mp.setAutoPlay(false);
-
-
-
-        new video();
+        HandleListofVideos();
+        HandleSearch();
     }
 
-    @FXML
-    public void handlePlay() { mp.play(); }
-    @FXML
-    private void handleStop() { mp.stop(); }
-    @FXML
-    private void handlePause() { mp.pause(); }
-
-    @FXML
+    @FXML private void handlePlay() { mp.play(); }
+    @FXML private void handleStop() { mp.stop(); }
+    @FXML private void handlePause() { mp.pause(); }
     /**
      * Method to handle the search field in the GUI
-     */
-    public void HandleSearch()
-    {
-
-
-
-        //Create search by foreach loop and arraylist
-        //Connect to Database, search with title or category
-        loadData();
-    }
-
-
-    /*
-    public video search(String title, String Category) // TO DO
-    {
-        for (video video1 : Videos) {
-            if (video.getVideoTitle() == title) { return video1;}
-        }
-        for (video video2 : Videos) {
-            if (video.getVideoCategory() == Category) { return video2;}
-        }
-        return null;
-    }
-
+     * @param
      */
 
-    private void loadData ()
-    {
-        list.removeAll(list);
-        ObservableList<String> names = FXCollections.observableArrayList(
-                "Julia", "Ian", "Sue", "Matthew", "Hannah", "Stephan", "Denise");
+    @FXML
+    public void HandleSearch() {
+    // VideoLibrary VL = new VideoLibrary();
+        String searchresult = "";
+        int searchResultsFound = 0;
+        ArrayList<String> arrayList = new ArrayList();
+        searchresult = searchfield.getText();
+        DB.selectSQL("SELECT COUNT(fldVideoTitle) from tblVideo WHERE (CHARINDEX('" + searchresult + "', fldVideoTitle) > 0 or CHARINDEX('" + searchresult + "', fldCategory) > 0 )");
 
-        searchlist.getItems().addAll(names);
+        // COUNTS THE AMOUNT OF VIDEOS IN TBLVIDEO
+        searchResultsFound = Integer.parseInt(DB.getData());
+
+        System.out.println(searchResultsFound);
+
+        // CLEARS BUFFER
+       // cleardata();
+        if (searchResultsFound > 0) {
+
+            DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE (CHARINDEX('" + searchresult + "', fldVideoTitle) > 0 or CHARINDEX('" + searchresult + "', fldCategory) > 0)");
+            //  displaySelectedData();
+            do {
+                String data = DB.getData();
+                if (data.equals(DB.NOMOREDATA)) {
+                    break;
+                } else {
+                    // WE ADD EACH ELEMENT TO THE ARRAY LIST
+                    arrayList.add(data);
+                    System.out.print(data);
+                }
+            } while (true);
+        } else {
+            System.out.println("Nothing Found, Check for Typos.");
+            // maybe clear playlist here.
+        }
+        System.out.println(searchlist);
+        searchlist.getItems().clear();
+
+        for (int i = 0; i < arrayList.size(); i++) {
+            searchlist.getItems().add(arrayList.get(i));
+        }
+        System.out.println(searchresult);
+    }
+    @FXML
+    private void HandleCategoryOne()
+    {
+        ArrayList<String> arrayListOne = new ArrayList();
+        DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldCategory = 'Entertainment'");
+        Category(arrayListOne);
+    }
+    @FXML
+    private void HandleCategoryTwo()
+    {
+        ArrayList<String> arrayListTwo = new ArrayList();
+        DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldCategory = 'Knowledge'");
+        Category(arrayListTwo);
+    }
+    @FXML
+    private void HandleCategoryThree()
+    {
+        ArrayList<String> arrayListThree = new ArrayList();
+        DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldCategory = 'News'");
+        Category(arrayListThree);
+    }
+
+    private void HandleListofVideos(){
+        ArrayList<String> arrayListAllVideos = new ArrayList();
+        DB.selectSQL("SELECT fldVideoTitle FROM tblVideo");
+        Category(arrayListAllVideos);
+        System.out.println(arrayListAllVideos);
 
     }
-    /*
-    private void SelectVideo ()
-    {
-        DB.selectSQL("SELECT fldVideoID FROM tblVideo");
+
+    private void Category(ArrayList<String> arrayList) {
         do {
-            String vid = DB.getData();
-            if (vid.equals(DB.NOMOREDATA)) break;
-            Videos.add(new video(Integer.parseInt(vid)));
+            String data = DB.getData();
+            if (data.equals(DB.NOMOREDATA)) {
+                break;
+            } else {
+                // WE ADD EACH ELEMENT TO THE ARRAY LIST
+                arrayList.add(data);
+                System.out.print(data);
+            }
         } while (true);
+        searchlist.getItems().clear();
+        for (int i = 0; i < arrayList.size(); i++) {
+            searchlist.getItems().add(arrayList.get(i));
+        }
+        System.out.println(searchlist);
     }
 
-     */
+
 }
 
 
