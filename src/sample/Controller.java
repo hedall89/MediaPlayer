@@ -45,7 +45,6 @@ public class Controller implements Initializable
         HandleListofVideos();
         HandleSearch();
     }
-
     @FXML private void handlePlay() { mp.play(); }
     @FXML private void handleStop() { mp.stop(); }
     @FXML private void handlePause() { mp.pause(); }
@@ -62,12 +61,9 @@ public class Controller implements Initializable
         ArrayList<String> arrayList = new ArrayList();
         searchresult = searchfield.getText();
         DB.selectSQL("SELECT COUNT(fldVideoTitle) from tblVideo WHERE (CHARINDEX('" + searchresult + "', fldVideoTitle) > 0 or CHARINDEX('" + searchresult + "', fldCategory) > 0 )");
-
         // COUNTS THE AMOUNT OF VIDEOS IN TBLVIDEO
         searchResultsFound = Integer.parseInt(DB.getData());
-
         System.out.println(searchResultsFound);
-
         // CLEARS BUFFER
        // cleardata();
         if (searchResultsFound > 0) {
@@ -132,7 +128,7 @@ public class Controller implements Initializable
             if (data.equals(DB.NOMOREDATA)) {
                 break;
             } else {
-                // WE ADD EACH ELEMENT TO THE ARRAY LIST
+                // ADDS EACH ELEMENT TO THE ARRAY LIST
                 arrayList.add(data);
                 System.out.print(data);
             }
