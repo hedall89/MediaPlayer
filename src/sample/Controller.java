@@ -14,6 +14,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
+import javafx.scene.paint.*;
 
 public class Controller implements Initializable
 {
@@ -24,6 +25,9 @@ public class Controller implements Initializable
     @FXML private TextField searchfield;
     @FXML private ListView<String> searchlist;
     @FXML private Slider volumeSlider;
+    @FXML private Button pause;
+    @FXML private  Button stop;
+    @FXML private  Button speed;
 
     /////////////////////////////////////////////////////
     /**
