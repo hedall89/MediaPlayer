@@ -9,35 +9,37 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.net.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.awt.event.ActionEvent;
-import java.util.Set;
-import java.util.logging.Logger;
 
-import javafx.scene.paint.*;
-import jdk.internal.org.objectweb.asm.Handle;
+
 
 public class Controller implements Initializable
 {
+    //Media
     @FXML private MediaView mediaV;
-    @FXML private Button play;
     @FXML private MediaPlayer mp;
     @FXML private Media me;
+    //TextFields
     @FXML private TextField searchfield;
+    //ListView
     @FXML private ListView<String> searchlist;
-    @FXML private Slider volumeSlider;
-    @FXML private Button pause;
-    @FXML private  Button stop;
-    @FXML private  Button speed;
     @FXML private ListView viwer;
+    //Buttons
+    @FXML private Button play;
+    @FXML private Button pause;
+    @FXML private Button stop;
+    @FXML private Button speed;
+    //Labels
+    @FXML private Label currenttime;
+    @FXML private Label totaltime;
+    //Sliders
+    @FXML private Slider time;
+    @FXML private Slider volumeSlider;
 
 
     /////////////////////////////////////////////////////
@@ -62,20 +64,9 @@ public class Controller implements Initializable
         // mp.setAutoPlay(true);
         // If autoplay is turned of the method play(), stop(), pause() etc controls how/when medias are played
         mp.setAutoPlay(false);
-        HandleSearch();
         HandleListofVideos();
-        DoubleProperty width = mediaV.fitWidthProperty();
-        DoubleProperty height = mediaV.fitHeightProperty();
-        width.bind(Bindings.selectDouble(mediaV.sceneProperty(), "width"));
-        height.bind(Bindings.selectDouble(mediaV.sceneProperty(), "height"));
-        volumeSlider.setValue(mp.getVolume()*100);
-        volumeSlider.valueProperty().addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable)
-            {
-                mp.setVolume(volumeSlider.getValue()/100);
-            }
-        });
+        HandleSearch();
+
     }
     @FXML private void handlePlay() { mp.play(); }
     @FXML private void handleStop() { mp.stop(); }
@@ -84,6 +75,7 @@ public class Controller implements Initializable
      * Method to handle the search field in the GUI
      * @param
      */
+    //TODO CLEAN UP METHODS
     public void play(ActionEvent event)
     {
         mp.play();
@@ -115,25 +107,39 @@ public class Controller implements Initializable
         mp.seek(mp.getTotalDuration());
         mp.stop();
     }
+    //TODO MAKE CONTROLVOLUME WORK WITH CURRENT MEDIA
+    private void ControlVolume(){
+        DoubleProperty width = mediaV.fitWidthProperty();
+        DoubleProperty height = mediaV.fitHeightProperty();
+        width.bind(Bindings.selectDouble(mediaV.sceneProperty(), "width"));
+        height.bind(Bindings.selectDouble(mediaV.sceneProperty(), "height"));
+        volumeSlider.setValue(mp.getVolume()*100);
+        volumeSlider.valueProperty().addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable)
+            {
+                mp.setVolume(volumeSlider.getValue()/100);
+            }
+        });
+    }
 
-
+    //TODO INSERT SEARCH FUNCTIONALITIES METHODS INTO VIDEO/MANAGEVIDEOS.JAVA CLASS*S
     @FXML
     public void HandleSearch() {
-    // VideoLibrary VL = new VideoLibrary();
-        String searchresult = "";
-        int searchResultsFound = 0;
+
+        String searchresult;
+        int searchResultsFound;
         ArrayList<String> arrayList = new ArrayList();
         searchresult = searchfield.getText();
         DB.selectSQL("SELECT COUNT(fldVideoTitle) from tblVideo WHERE (CHARINDEX('" + searchresult + "', fldVideoTitle) > 0 or CHARINDEX('" + searchresult + "', fldCategory) > 0 )");
-        // COUNTS THE AMOUNT OF VIDEOS IN TBLVIDEO
+
         searchResultsFound = Integer.parseInt(DB.getData());
         System.out.println(searchResultsFound);
-        // CLEARS BUFFER
-       // cleardata();
+
         if (searchResultsFound > 0) {
 
             DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE (CHARINDEX('" + searchresult + "', fldVideoTitle) > 0 or CHARINDEX('" + searchresult + "', fldCategory) > 0)");
-            //  displaySelectedData();
+
             do {
                 String data = DB.getData();
                 if (data.equals(DB.NOMOREDATA)) {
@@ -146,13 +152,13 @@ public class Controller implements Initializable
             } while (true);
         } else {
             System.out.println("Nothing Found, Check for Typos.");
-            // maybe clear playlist here.
+
         }
         System.out.println(searchlist);
         searchlist.getItems().clear();
 
-        for (int i = 0; i < arrayList.size(); i++) {
-            searchlist.getItems().add(arrayList.get(i));
+        for (String s : arrayList) {
+            searchlist.getItems().add(s);
         }
         System.out.println(searchresult);
     }
@@ -161,37 +167,34 @@ public class Controller implements Initializable
     {
         ArrayList<String> arrayListOne = new ArrayList();
         DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldCategory = 'Entertainment'");
-        Category(arrayListOne);
+        GetFromDB(arrayListOne);
     }
     @FXML
     private void HandleCategoryTwo()
     {
         ArrayList<String> arrayListTwo = new ArrayList();
         DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldCategory = 'Knowledge'");
-        Category(arrayListTwo);
+        GetFromDB(arrayListTwo);
     }
     @FXML
     private void HandleCategoryThree()
     {
         ArrayList<String> arrayListThree = new ArrayList();
         DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldCategory = 'News'");
-        Category(arrayListThree);
+        GetFromDB(arrayListThree);
     }
-@FXML
-    private void HandleListofVideos(){
+
+        @FXML
+        private void HandleListofVideos() {
         ArrayList<String> arrayListAllVideos = new ArrayList();
         DB.selectSQL("SELECT fldVideoTitle FROM tblVideo");
-        Category(arrayListAllVideos);
+        GetFromDB(arrayListAllVideos);
 
         ObservableList<String> Listview = FXCollections.observableArrayList(arrayListAllVideos);
         searchlist.getItems().addAll(Listview);
+        }
 
-
-
-    }
-
-
-    private void Category(ArrayList<String> arrayList) {
+        private void GetFromDB(ArrayList<String> arrayList) {
         do {
             String data = DB.getData();
             if (data.equals(DB.NOMOREDATA)) {
@@ -203,20 +206,28 @@ public class Controller implements Initializable
             }
         } while (true);
         searchlist.getItems().clear();
-        for (int i = 0; i < arrayList.size(); i++) {
-            searchlist.getItems().add(arrayList.get(i));
-        }
+            for (String s : arrayList) {
+                searchlist.getItems().add(s);
+            }
         System.out.println(searchlist);
     }
-
-
-
-
-
+    //TODO ATTACH _FILEPATH TO MP.PLAY() TO PLAY CURRENT VIDEO.
+    // CONSTRUCT PLAYLIST METHODS.
+    // CREATE PLAYLIST
+    // EDIT/UPDATE PLAYLIST - ATTACH TO GUI.
+    public void HandleSelection() {
+        String SelectedSong = searchlist.getSelectionModel().getSelectedItem();
+        String _FILEPATH;
+        if(SelectedSong==null || SelectedSong.isEmpty()){
+            System.out.println("Nothing Selected");
+        }else{
+            System.out.println("You have selected: " + SelectedSong);
+        }
+        DB.selectSQL("SELECT fldVideoFilePath FROM tblVideo WHERE (fldVideoTitle = '"+ SelectedSong +"')");
+        _FILEPATH = DB.getData();
+        System.out.println(_FILEPATH);
     }
-
-
-
+}
 
 
 

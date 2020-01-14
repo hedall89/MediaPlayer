@@ -30,8 +30,6 @@ public class DB {
     private static boolean pendingData=false; // from select statement
     private static boolean terminated = false;
 
-    private DB(){
-    }
     /**
      * Static initializer - no object construction
      */
