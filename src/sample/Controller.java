@@ -11,10 +11,19 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import java.io.*;
 import java.net.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
+import java.util.Set;
+import java.util.logging.Logger;
+
 import javafx.scene.paint.*;
+import jdk.internal.org.objectweb.asm.Handle;
 
 public class Controller implements Initializable
 {
@@ -28,6 +37,8 @@ public class Controller implements Initializable
     @FXML private Button pause;
     @FXML private  Button stop;
     @FXML private  Button speed;
+    @FXML private ListView viwer;
+
 
     /////////////////////////////////////////////////////
     /**
@@ -51,8 +62,8 @@ public class Controller implements Initializable
         // mp.setAutoPlay(true);
         // If autoplay is turned of the method play(), stop(), pause() etc controls how/when medias are played
         mp.setAutoPlay(false);
-        HandleListofVideos();
         HandleSearch();
+        HandleListofVideos();
         DoubleProperty width = mediaV.fitWidthProperty();
         DoubleProperty height = mediaV.fitHeightProperty();
         width.bind(Bindings.selectDouble(mediaV.sceneProperty(), "width"));
@@ -104,6 +115,8 @@ public class Controller implements Initializable
         mp.seek(mp.getTotalDuration());
         mp.stop();
     }
+
+
     @FXML
     public void HandleSearch() {
     // VideoLibrary VL = new VideoLibrary();
@@ -164,14 +177,19 @@ public class Controller implements Initializable
         DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldCategory = 'News'");
         Category(arrayListThree);
     }
-
+@FXML
     private void HandleListofVideos(){
         ArrayList<String> arrayListAllVideos = new ArrayList();
         DB.selectSQL("SELECT fldVideoTitle FROM tblVideo");
         Category(arrayListAllVideos);
-        System.out.println(arrayListAllVideos);
+
+        ObservableList<String> Listview = FXCollections.observableArrayList(arrayListAllVideos);
+        searchlist.getItems().addAll(Listview);
+
+
 
     }
+
 
     private void Category(ArrayList<String> arrayList) {
         do {
@@ -192,7 +210,13 @@ public class Controller implements Initializable
     }
 
 
-}
+
+
+
+    }
+
+
+
 
 
 
