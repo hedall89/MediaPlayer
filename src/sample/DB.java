@@ -37,7 +37,7 @@ public class DB {
      */
     static {
         Properties props = new Properties();
-        String fileName = "db.properties";
+        String fileName = "C:/Users/Jette/IdeaProjects/MediaPlayer_JC/src/sample/db.properties";
         InputStream input;
         try{
             input = new FileInputStream(fileName);
