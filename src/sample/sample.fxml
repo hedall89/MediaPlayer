@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.media.MediaView?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #228B22;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #228B22;" xmlns="http://javafx.com/javafx/8.0.231" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
       <SplitPane dividerPositions="0.27591973244147155" prefHeight="421.0" prefWidth="600.0" style="-fx-background-color: #D3D3D3;">
          <items>
@@ -23,39 +23,31 @@
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="191.0" prefWidth="158.0" style="-fx-background-color: 000000;">
                            <children>
                               <TextField fx:id="searchfield" alignment="CENTER" layoutY="1.0" onAction="#HandleSearch" prefHeight="25.0" prefWidth="158.0" promptText="Search" />
-                              <Button alignment="CENTER" layoutY="27.0" mnemonicParsing="false" onAction="#HandleCategoryOne" prefHeight="27.0" prefWidth="158.0" style="-fx-background-color: #D3D3D3;" text="Entertainment" />
+                              <Button alignment="CENTER" layoutY="27.0" mnemonicParsing="false" onAction="#HandleCategoryOne" prefHeight="27.0" prefWidth="158.0" style="-fx-background-color: #D3D3D3;" text="Travel" />
                               <Button alignment="CENTER" layoutY="54.0" mnemonicParsing="false" onAction="#HandleCategoryTwo" prefHeight="27.0" prefWidth="158.0" style="-fx-background-color: #D3D3D3;" text="Sport" />
-                              <Button alignment="CENTER" layoutY="81.0" mnemonicParsing="false" onAction="#HandleCategoryThree" prefHeight="27.0" prefWidth="158.0" style="-fx-background-color: #D3D3D3;" text="Food" />
+                              <Button alignment="CENTER" layoutY="81.0" mnemonicParsing="false" onAction="#HandleCategoryThree" prefHeight="27.0" prefWidth="158.0" style="-fx-background-color: #D3D3D3;" text="Animals" />
                               <ListView fx:id="searchlist" layoutX="1.0" layoutY="111.0" prefHeight="88.0" prefWidth="158.0" />
+                              <Button fx:id="addPlaylist" layoutY="166.0" mnemonicParsing="false" onAction="#handleAddPlaylist" prefHeight="31.0" prefWidth="158.0" text="Add Playlist" />
                            </children>
                         </AnchorPane>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="196.0" prefWidth="158.0" style="-fx-background-color: #D3D3D3;">
                            <children>
-                              <TextField layoutX="-1.0" layoutY="4.0" style="-fx-background-color: #D3D3D3;" text="Playlists" />
+                              <TextField fx:id="txtFldEnterNewPlaylistName" editable="false" layoutX="-1.0" layoutY="4.0" onAction="#handleEnterNewPlaylist" promptText="enter name of new playlist" style="-fx-background-color: #D3D3D3;" />
                               <Accordion layoutY="31.0" prefHeight="96.0" prefWidth="147.0" style="-fx-background-color: #D3D3D3;">
                                  <panes>
-                                    <TitledPane animated="false" style="-fx-background-color: #D3D3D3;" text="fun">
+                                    <TitledPane fx:id="titledPaneOne" animated="false" onMouseClicked="#handleMouseClickShowPlaylist" onMousePressed="#handleMousePressedGetTitledPaneID" style="-fx-background-color: #D3D3D3;" text="untitled">
                                        <content>
-                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                             <children>
-                                                <ListView layoutX="-41.0" layoutY="-93.0" prefHeight="200.0" prefWidth="200.0" />
-                                             </children></AnchorPane>
+                                          <ListView fx:id="ListViewPlaylistOne" prefHeight="200.0" prefWidth="200.0" />
                                        </content>
                                     </TitledPane>
-                                    <TitledPane animated="false" text="useful">
+                                    <TitledPane fx:id="titledPaneTwo" animated="false" onMouseClicked="#handleMouseClickShowPlaylist" onMousePressed="#handleMousePressedGetTitledPaneID" text="untitled">
                                        <content>
-                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                             <children>
-                                                <ListView layoutX="-39.0" layoutY="-100.0" prefHeight="200.0" prefWidth="200.0" />
-                                             </children></AnchorPane>
+                                          <ListView fx:id="ListViewPlaylistTwo" prefHeight="200.0" prefWidth="200.0" />
                                        </content>
                                     </TitledPane>
-                                    <TitledPane animated="false" style="-fx-background-color: #D3D3D3;" text="kool">
+                                    <TitledPane fx:id="titledPaneThree" animated="false" onMouseClicked="#handleMouseClickShowPlaylist" onMousePressed="#handleMousePressedGetTitledPaneID" style="-fx-background-color: #D3D3D3;" text="untitled">
                                        <content>
-                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #D3D3D3;">
-                                             <children>
-                                                <ListView layoutX="-5.0" layoutY="-93.0" prefHeight="186.0" prefWidth="147.0" style="-fx-background-color: #D3D3D3;" />
-                                             </children></AnchorPane>
+                                          <ListView fx:id="ListViewPlaylistThree" prefHeight="200.0" prefWidth="200.0" />
                                        </content>
                                     </TitledPane>
                                  </panes>
