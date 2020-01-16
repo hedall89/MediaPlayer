@@ -1,6 +1,6 @@
 package sample.video;
 import sample.DB;
-import sample.Controller;
+
 
 /**
  * Class to manage existing Videos or ADD new Videos to the SQL DATABASE

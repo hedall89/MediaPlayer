@@ -30,14 +30,18 @@ public class DB {
     private static boolean pendingData=false; // from select statement
     private static boolean terminated = false;
 
-    private DB(){
-    }
     /**
      * Static initializer - no object construction
      */
     static {
         Properties props = new Properties();
+<<<<<<< HEAD
         String fileName = "C:/Users/Jette/IdeaProjects/MediaPlayer_JC/src/sample/db.properties";
+=======
+
+      String fileName = "db.properties";
+       // String fileName = "C:\\Users\\sejru\\OneDrive\\EASV\\MediaPlayer\\db.properties";
+>>>>>>> origin/master
         InputStream input;
         try{
             input = new FileInputStream(fileName);
