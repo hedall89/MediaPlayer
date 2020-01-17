@@ -1,7 +1,6 @@
 package sample;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.*;
@@ -12,11 +11,9 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
-
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -58,7 +55,6 @@ public class Controller implements Initializable
     //String
     String newPlaylistName; // JC
 
-
     /////////////////////////////////////////////////////
     /**
      * This method is invoked automatically in the beginning. Used for initializing, loading data etc.
@@ -83,28 +79,28 @@ public class Controller implements Initializable
         mp.setAutoPlay(false);
         HandleListofVideos();
 
-//        HandleSearch(); // should not be invoked
         hasFirstClicked = false; // JC
         showStoredPlaylistsOnTitledPane(); // JC
     }
 
-    @FXML private void handlePlay() { mp.play(); }
-    @FXML private void handleStop() { mp.stop(); }
-    @FXML private void handlePause() { mp.pause(); }
     /**
-     * Method to handle the search field in the GUI
-     * @param
+     * Method to handle the play Button.
      */
-    //TODO CLEAN UP METHODS
-    public void play(ActionEvent event)
-    {
-        mp.play();
-    }
-    public void pause (ActionEvent event)
-    {
-        mp.pause();
-    }
-    public void fast (ActionEvent event)
+    @FXML private void handlePlay() { mp.play(); }
+
+    /**
+     * Method to handle the Stop button.
+     */
+    @FXML private void handleStop() { mp.stop(); }
+
+    /**
+     * Method to handle the Pause button.
+     */
+    @FXML private void handlePause() { mp.pause(); }
+
+
+  // To be removed ??
+    /*public void fast (ActionEvent event)
     {
         mp.setRate(2);
     }
@@ -126,8 +122,15 @@ public class Controller implements Initializable
     {
         mp.seek(mp.getTotalDuration());
         mp.stop();
-    }
+    }*/
+
+
     //TODO MAKE CONTROLVOLUME WORK WITH CURRENT MEDIA
+
+    /**
+     * Method to control volume, with a volume slider.
+     */
+    @FXML
     private void ControlVolume(){
         DoubleProperty width = mediaV.fitWidthProperty();
         DoubleProperty height = mediaV.fitHeightProperty();
@@ -135,6 +138,10 @@ public class Controller implements Initializable
         height.bind(Bindings.selectDouble(mediaV.sceneProperty(), "height"));
         volumeSlider.setValue(mp.getVolume()*100);
         volumeSlider.valueProperty().addListener(new InvalidationListener() {
+            /**
+             * Method for setting the volume
+             * @param observable
+             */
             @Override
             public void invalidated(Observable observable)
             {
@@ -144,6 +151,10 @@ public class Controller implements Initializable
     }
 
     //TODO INSERT SEARCH FUNCTIONALITIES METHODS INTO VIDEO/MANAGEVIDEOS.JAVA CLASS*S
+
+    /**
+     * Method for handling the searchfield in the GUI.
+     */
     @FXML
     public void HandleSearch() {
 
@@ -182,6 +193,10 @@ public class Controller implements Initializable
         }
         System.out.println(searchresult);
     }
+
+    /**
+     *Method for selecting a specific Category.
+     */
     @FXML
     private void HandleCategoryOne()
     {
@@ -189,6 +204,10 @@ public class Controller implements Initializable
         DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldCategory = 'Travel'");
         GetFromDB(arrayListOne);
     }
+
+    /**
+     * Method for selecting a specific Category.
+     */
     @FXML
     private void HandleCategoryTwo()
     {
@@ -196,6 +215,10 @@ public class Controller implements Initializable
         DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldCategory = 'Sport'");
         GetFromDB(arrayListTwo);
     }
+
+    /**
+     * Method for selecting a specific Category.
+     */
     @FXML
     private void HandleCategoryThree()
     {
@@ -274,6 +297,10 @@ public class Controller implements Initializable
         } while (!noMoreData && counter != 4);
     }
 
+    /**
+     * This method retrieves information from the database, and stores it in an ArrayList.
+     * @param arrayList
+     */
         private void GetFromDB(ArrayList<String> arrayList) {
         do {
             String data = DB.getData();
@@ -291,9 +318,6 @@ public class Controller implements Initializable
             }
         System.out.println(searchlist);
     }
-
-    //TODO ATTACH _FILEPATH TO MP.PLAY() TO PLAY CURRENT VIDEO.
-
 
     // CREATE PLAYLIST:
     @FXML
@@ -435,17 +459,25 @@ public class Controller implements Initializable
 
     // TODO add method deletePlaylist()
 
-
+    /**
+     * Method for selecting a specific video from the listView, and adding it to the mediaview.
+     */
     public void HandleSelection() {
+
         String SelectedSong = searchlist.getSelectionModel().getSelectedItem();
         String _FILEPATH;
-        if(SelectedSong==null || SelectedSong.isEmpty()){
+        if (SelectedSong == null || SelectedSong.isEmpty()) {
             System.out.println("Nothing Selected");
-        }else{
+        } else {
             System.out.println("You have selected: " + SelectedSong);
         }
-        DB.selectSQL("SELECT fldVideoFilePath FROM tblVideo WHERE (fldVideoTitle = '"+ SelectedSong +"')");
-        _FILEPATH = DB.getData();
+        DB.selectSQL("SELECT fldVideoFilePath FROM tblVideo WHERE (fldVideoTitle = '" + SelectedSong + "')");
+        _FILEPATH = new File(DB.getData()).getAbsolutePath();
+
+        me = new Media(new File(_FILEPATH).toURI().toString());
+        mp = new MediaPlayer(me);
+        mediaV.setMediaPlayer(mp);
+        mp.setAutoPlay(false);
         System.out.println(_FILEPATH);
     }
 }
