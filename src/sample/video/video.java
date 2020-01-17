@@ -2,6 +2,7 @@ package sample.video;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import sample.Controller;
 import sample.DB;
 import java.io.File;
 
@@ -75,6 +76,10 @@ public class video
         cleardata();
         return VideoCategory;
     }
+
+    /**
+     * Method for clearing buffer from the database.
+     */
     private static void cleardata() {
 
 
