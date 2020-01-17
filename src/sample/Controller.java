@@ -55,15 +55,6 @@ public class Controller implements Initializable
     //String
     String newPlaylistName; // JC
 
-    public Controller(Button play, Button pause, Button stop, Button speed, Button addPlaylist) {
-        this.play = play;
-        this.pause = pause;
-        this.stop = stop;
-        this.speed = speed;
-        this.addPlaylist = addPlaylist;
-    }
-
-
     /////////////////////////////////////////////////////
     /**
      * This method is invoked automatically in the beginning. Used for initializing, loading data etc.
@@ -86,9 +77,8 @@ public class Controller implements Initializable
         // mp.setAutoPlay(true);
         // If autoplay is turned of the method play(), stop(), pause() etc controls how/when medias are played
         mp.setAutoPlay(false);
-        HandleSearch();
         HandleListofVideos();
-        //showVideos(); //JC TODO: discuss which one to choose, I cant get "HandleListofVideos()" to work
+
 
         hasFirstClicked = false; // JC
         showStoredPlaylistsOnTitledPane(); // JC
