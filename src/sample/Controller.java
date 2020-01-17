@@ -1,7 +1,6 @@
 package sample;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.scene.media.*;
 import javafx.scene.control.*;
@@ -15,7 +14,6 @@ import java.awt.event.MouseEvent;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -56,6 +54,14 @@ public class Controller implements Initializable
     private boolean hasFirstClicked; // JC
     //String
     String newPlaylistName; // JC
+
+    public Controller(Button play, Button pause, Button stop, Button speed, Button addPlaylist) {
+        this.play = play;
+        this.pause = pause;
+        this.stop = stop;
+        this.speed = speed;
+        this.addPlaylist = addPlaylist;
+    }
 
 
     /////////////////////////////////////////////////////
