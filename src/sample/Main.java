@@ -14,9 +14,6 @@ import javafx.scene.control.Button;
 import javax.swing.text.html.ListView;
 
 
-
-
-
 public class Main extends Application {
 
     @Override

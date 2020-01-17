@@ -39,7 +39,7 @@
       <Pane prefHeight="228.0" prefWidth="132.0" GridPane.rowIndex="1">
          <children>
             <Button fx:id="addPlaylist" layoutY="1.0" mnemonicParsing="false" onAction="#handleAddPlaylist" prefWidth="132.0" style="-fx-background-color: darkcyan;" text="Add Playlist" />
-            <TextField fx:id="txtFldEnterNewPlaylistNa" layoutY="29.0" onAction="#handleEnterNewPlaylist" prefWidth="132.0" style="-fx-background-color: #A9A9A9;" text="Enter the name of the playlist" />
+            <TextField fx:id="txtFldEnterNewPlaylistName" layoutY="29.0" onAction="#handleEnterNewPlaylist" prefWidth="132.0" style="-fx-background-color: #A9A9A9;" text="Enter the name of the playlist" />
             <Accordion layoutY="64.0" prefHeight="116.0" prefWidth="132.0" style="-fx-background-color: darkcyan;">
                <panes>
                   <TitledPane fx:id="titledPaneOne" animated="false" onMouseClicked="#handleMouseClickShowPlaylist" onMousePressed="#handleMousePressedGetTitledPaneID" style="-fx-background-color: #A9A9A9;" text="nice">
