@@ -9,9 +9,6 @@ import javafx.stage.Stage;
 import javax.swing.text.html.ListView;
 
 
-
-
-
 public class Main extends Application {
 
     @Override

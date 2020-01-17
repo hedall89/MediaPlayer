@@ -3,6 +3,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.media.*;
 import javafx.scene.control.*;
 import javafx.fxml.FXML;
@@ -11,7 +12,7 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
-import java.awt.event.MouseEvent;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -81,8 +82,8 @@ public class Controller implements Initializable
         // If autoplay is turned of the method play(), stop(), pause() etc controls how/when medias are played
         mp.setAutoPlay(false);
         HandleListofVideos();
-        //showVideos(); //JC TODO: discuss which one to choose, I cant get "HandleListofVideos()" to work
-        HandleSearch();
+
+//        HandleSearch(); // should not be invoked
         hasFirstClicked = false; // JC
         showStoredPlaylistsOnTitledPane(); // JC
     }
@@ -414,8 +415,12 @@ public class Controller implements Initializable
             } else {
                 videoTitlesOfPlaylist.add(totalPlaylist);
                 ListViewToUse.setItems(videoTitlesOfPlaylist);
+
+
             }
         } while (true);
+        System.out.println("ListView to use: " + ListViewToUse);
+        System.out.println("playlist contains: " + videoTitlesOfPlaylist);
     }
 
     // EDIT/UPDATE PLAYLIST - ATTACH TO GUI:
