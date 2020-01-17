@@ -37,7 +37,7 @@ public class DB {
         Properties props = new Properties();
 
       String fileName = "db.properties";
-       // String fileName = "C:\\Users\\sejru\\OneDrive\\EASV\\MediaPlayer\\db.properties";
+        fileName = "db.properties";
         InputStream input;
         try{
             input = new FileInputStream(fileName);
