@@ -11,8 +11,6 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
@@ -54,7 +52,7 @@
             <ListView fx:id="searchlist" layoutY="160.0" onMouseClicked="#HandleSelection" prefHeight="250.0" prefWidth="427.0" style="-fx-background-color: #303030;" />
          </children>
       </Pane>
-      <Pane prefHeight="228.0" prefWidth="132.0" GridPane.rowIndex="1">
+      <Pane prefHeight="228.0" prefWidth="132.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
          <children>
             <Button fx:id="addPlaylist" layoutY="40.0" mnemonicParsing="false" onAction="#handleAddPlaylist" prefHeight="40.0" prefWidth="427.0" style="-fx-background-color: black;" text="Add Playlist" textFill="DARKCYAN">
                <font>
@@ -76,7 +74,7 @@
                   </TitledPane>
                   <TitledPane fx:id="titledPaneTwo" animated="false" onMouseClicked="#handleMouseClickShowPlaylist" onMousePressed="#handleMousePressedGetTitledPaneID" prefWidth="427.0" style="-fx-background-color: darkcyan;" text="untitled">
                      <content>
-                        <ListView fx:id="ListViewPlaylistTwo" prefHeight="200.0" prefWidth="427.0" style="-fx-background-color: #A9A9A9;" />
+                        <ListView fx:id="ListViewPlaylistTwo" onMouseClicked="#PlayListSelection" prefHeight="200.0" prefWidth="427.0" style="-fx-background-color: #A9A9A9;" />
                      </content>
                      <font>
                         <Font name="SansSerif Bold" size="16.0" />
@@ -94,37 +92,13 @@
             </Accordion>
          </children>
       </Pane>
-      <Pane prefHeight="290.0" prefWidth="515.0" style="-fx-background-color: #303030;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <Pane prefHeight="290.0" prefWidth="515.0" style="-fx-background-color: #303030;" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
          <children>
-            <Slider fx:id="time" layoutX="48.0" layoutY="143.0" prefHeight="15.0" prefWidth="218.0" />
+            <Slider fx:id="time" layoutX="48.0" layoutY="143.0" onDragDetected="#handleDuration" onMouseClicked="#handleDuration" prefHeight="15.0" prefWidth="218.0" />
             <Slider fx:id="volumeSlider" layoutX="665.0" layoutY="146.0" onDragDetected="#ControlVolume" value="100.0" />
-            <Button layoutX="461.0" layoutY="140.0" mnemonicParsing="false" onAction="#handlePause" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: darkcyan;">
-               <graphic>
-                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Downloads/iconfinder_audio-video-outline-play_344692.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button layoutX="337.0" layoutY="138.0" mnemonicParsing="false" onAction="#handlePlay" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: darkcyan;">
-               <graphic>
-                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Downloads/iconfinder_audio-video-outline-pause_344691.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button layoutX="563.0" layoutY="137.0" mnemonicParsing="false" onAction="#handleStop" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: darkcyan;">
-               <graphic>
-                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Desktop/Computer%20Science/stop.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
+            <Button fx:id="pauseBtn" layoutX="448.0" layoutY="133.0" mnemonicParsing="false" onAction="#handlePause" prefHeight="40.0" prefWidth="40.0" style="-fx-background-image: url(&quot;images/pause.png&quot;); -fx-background-color: darkcyan; -fx-background-size: 40px 40px;" />
+            <Button fx:id="playBtn" layoutX="338.0" layoutY="133.0" mnemonicParsing="false" onAction="#handlePlay" prefHeight="40.0" prefWidth="40.0" style="-fx-background-image: url(&quot;images/play.png&quot;); -fx-background-size: 40px 40px; -fx-background-color: darkcyan;" />
+            <Button fx:id="stopBtn" layoutX="544.0" layoutY="133.0" mnemonicParsing="false" onAction="#handleStop" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: darkcyan; -fx-background-image: url(&quot;images/stop.png&quot;); -fx-background-size: 40px 40px;" />
             <Label fx:id="currenttime" layoutY="105.0" text="00:00" />
             <Label fx:id="totaltime" layoutX="251.0" layoutY="104.0" text="00:00" />
             <MenuButton fx:id="menuButton" layoutX="71.0" layoutY="197.0" mnemonicParsing="false" onAction="#handleChooseVideoToAddToPlaylist" onMouseClicked="#handleChooseVideoToAddToPlaylist" prefHeight="40.0" prefWidth="197.0" style="-fx-background-color: darkcyan;" text="add video to playlist...">
@@ -141,7 +115,7 @@
             <Button layoutX="14.0" layoutY="312.0" mnemonicParsing="false" onAction="#DeleteSelectedPL" style="-fx-background-color: darkcyan;" text="Delete Playlist" />
          </children>
       </Pane>
-      <MediaView fx:id="mediaV" fitHeight="400.0" fitWidth="700.0" nodeOrientation="INHERIT" GridPane.columnIndex="1">
+      <MediaView fx:id="mediaV" fitHeight="400.0" fitWidth="850.0" nodeOrientation="INHERIT" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
          <viewport>
             <Rectangle2D />
          </viewport>
