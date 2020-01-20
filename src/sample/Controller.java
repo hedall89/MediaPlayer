@@ -9,7 +9,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
-import sample.playlist.ManagePlaylists;
+import sample.playlist.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -27,37 +27,64 @@ import java.util.*;
 
 
 
-public class Controller implements Initializable
-{
+public class Controller implements Initializable {
 
     //Media
-    @FXML private MediaView mediaV;
-    @FXML private MediaPlayer mp;
-    @FXML private Media me;
+    @FXML
+    private MediaView mediaV;
+    @FXML
+    private MediaPlayer mp;
+    @FXML
+    private Media me;
     //TextFields
-    @FXML private TextField searchfield;
-    @FXML private TextField txtFldEnterNewPlaylistName;
+    @FXML
+    private TextField searchfield;
+    @FXML
+    private TextField txtFldEnterNewPlaylistName;
     //ListView
-    @FXML private ListView<String> searchlist;
-    @FXML private ListView<String> ListViewPlaylistOne;
-    @FXML private ListView<String> ListViewPlaylistTwo;
-    @FXML private ListView<String> ListViewPlaylistThree;
+    @FXML
+    private ListView<String> searchlist;
+    @FXML
+    private ListView<String> ListViewPlaylistOne;
+    @FXML
+    private ListView<String> ListViewPlaylistTwo;
+    @FXML
+    private ListView<String> ListViewPlaylistThree;
     //Buttons
-    @FXML private Button addPlaylist;
+    @FXML
+    private Button addPlaylist;
+    @FXML
+    private Button pauseBtn;
+    @FXML
+    private Button playBtn;
+    @FXML
+    private Button stopBtn;
     //Sliders
-    @FXML private Slider time;
-    @FXML private Slider volumeSlider;
+    @FXML
+    private Slider time;
+    @FXML
+    private Slider volumeSlider;
     //TitledPanes
-    @FXML private TitledPane titledPaneOne;
-    @FXML private TitledPane titledPaneTwo;
-    @FXML private TitledPane titledPaneThree;
+    @FXML
+    private TitledPane titledPaneOne;
+    @FXML
+    private TitledPane titledPaneTwo;
+    @FXML
+    private TitledPane titledPaneThree;
     private TitledPane currentPane;
     //MenuButtons
-    @FXML private MenuButton menuButton;
+    @FXML
+    private MenuButton menuButton;
     //MenuItems
-    @FXML private MenuItem menuItem1;
-    @FXML private MenuItem menuItem2;
-    @FXML private MenuItem menuItem3;
+    @FXML
+    private MenuItem menuItem1;
+    @FXML
+    private MenuItem menuItem2;
+    @FXML
+    private MenuItem menuItem3;
+
+
+    // NON FXML
     //Booleans
     private boolean hasFirstClicked;
     //Strings
@@ -70,9 +97,9 @@ public class Controller implements Initializable
     private String PlaylistOneVid;
     private String PlaylistTwoVid;
     private String PlaylistThreeVid;
-
-
+    List<String> players = new ArrayList<>();
     /////////////////////////////////////////////////////
+
     /**
      * This method is invoked automatically in the beginning. Used for initializing, loading data etc.
      *
@@ -80,8 +107,7 @@ public class Controller implements Initializable
      * @param resources
      */
     @FXML
-    public void initialize(URL location, ResourceBundle resources)
-    {
+    public void initialize(URL location, ResourceBundle resources) {
 
         // Build the path to the location of the media file
         String path = new File("src/sample/media/file_example_MP4_640_3MG.mp4").getAbsolutePath();
@@ -95,42 +121,79 @@ public class Controller implements Initializable
         HandleListofVideos();
 
         hasFirstClicked = false;
+
         showStoredPlaylistsOnTitledPane();
     }
 
     /**
      * Method to handle the play Button.
      */
-    @FXML private void handlePlay() { mp.play(); }
+    @FXML
+    private void handlePlay() {
+        mp.play();
+
+    }
 
     /**
      * Method to handle the Stop button.
      */
-    @FXML private void handleStop() { mp.stop(); }
+    @FXML
+    private void handleStop() {
+        mp.stop();
+    }
 
     /**
      * Method to handle the Pause button.
      */
-    @FXML private void handlePause() { mp.pause(); }
+    @FXML
+    private void handlePause() {
+        mp.pause();
+    }
+
+    /**
+     * Method to handle the duration slider of a video
+     */
+    @FXML
+    private void handleDuration() {
+        // DURATION MANAGEMENT
+        // Will listen to the slider and update it continuously
+        mp.currentTimeProperty().addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+                //
+            }
+        });
+        // Inorder to jump to the certain part of the media
+        // Will change the values if the user moves the slider to a new position
+        time.valueProperty().addListener(new InvalidationListener() {
+            public void invalidated(Observable ov) {
+                if (time.isPressed()) { // It would set the time
+
+
+                    // as specified by user by pressing
+                    mp.seek(mp.getMedia().getDuration().multiply(time.getValue() / 100));
+                }
+            }
+        });
+    }
     /**
      * Method to control volume, with a volume slider.
      */
     @FXML
-    private void ControlVolume(){
+    private void ControlVolume() {
         DoubleProperty width = mediaV.fitWidthProperty();
         DoubleProperty height = mediaV.fitHeightProperty();
         width.bind(Bindings.selectDouble(mediaV.sceneProperty(), "width"));
         height.bind(Bindings.selectDouble(mediaV.sceneProperty(), "height"));
-        volumeSlider.setValue(mp.getVolume()*100);
+        volumeSlider.setValue(mp.getVolume() * 100);
         volumeSlider.valueProperty().addListener(new InvalidationListener() {
             /**
              * Method for setting the volume
              * @param observable
              */
             @Override
-            public void invalidated(Observable observable)
-            {
-                mp.setVolume(volumeSlider.getValue()/100);
+            public void invalidated(Observable observable) {
+                mp.setVolume(volumeSlider.getValue() / 100);
             }
         });
     }
@@ -141,7 +204,6 @@ public class Controller implements Initializable
      */
     @FXML
     public void HandleSearch() {
-
         String searchresult;
         int searchResultsFound;
         ArrayList<String> arrayList = new ArrayList();
@@ -179,11 +241,10 @@ public class Controller implements Initializable
     }
 
     /**
-     *Method for selecting a specific Category.
+     * Method for selecting a specific Category.
      */
     @FXML
-    private void HandleCategoryOne()
-    {
+    private void HandleCategoryOne() {
         ArrayList<String> arrayListOne = new ArrayList();
         DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldCategory = 'Travel'");
         GetFromDB(arrayListOne);
@@ -193,8 +254,7 @@ public class Controller implements Initializable
      * Method for selecting a specific Category.
      */
     @FXML
-    private void HandleCategoryTwo()
-    {
+    private void HandleCategoryTwo() {
         ArrayList<String> arrayListTwo = new ArrayList();
         DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldCategory = 'Sport'");
         GetFromDB(arrayListTwo);
@@ -204,25 +264,26 @@ public class Controller implements Initializable
      * Method for selecting a specific Category.
      */
     @FXML
-    private void HandleCategoryThree()
-    {
+    private void HandleCategoryThree() {
         ArrayList<String> arrayListThree = new ArrayList();
         DB.selectSQL("SELECT fldVideoTitle FROM tblVideo WHERE fldCategory = 'Animals'");
         GetFromDB(arrayListThree);
     }
-        @FXML
-        /**
-        * This method will show all videos in a listView, once the program opens.
-        *
-         */
-        private void HandleListofVideos() {
+
+    @FXML
+    /**
+     * This method will show all videos in a listView, once the program opens.
+     *
+     */
+    private void HandleListofVideos() {
         ArrayList<String> arrayListAllVideos = new ArrayList();
         DB.selectSQL("SELECT fldVideoTitle FROM tblVideo");
         GetFromDB(arrayListAllVideos);
 
         ObservableList<String> Listview = FXCollections.observableArrayList(arrayListAllVideos);
         searchlist.getItems().addAll(Listview);
-        }
+    }
+
     @FXML
     /**
      * This method checks in the DB, if there are any playlists stored already and
@@ -259,11 +320,13 @@ public class Controller implements Initializable
         } while (!noMoreData && counter < 4);
 
     }
+
     /**
      * This method retrieves information from the database, and stores it in an ArrayList.
+     *
      * @param arrayList
      */
-        private void GetFromDB(ArrayList<String> arrayList) {
+    private void GetFromDB(ArrayList<String> arrayList) {
         do {
             String data = DB.getData();
             if (data.equals(DB.NOMOREDATA)) {
@@ -275,11 +338,12 @@ public class Controller implements Initializable
             }
         } while (true);
         searchlist.getItems().clear();
-            for (String s : arrayList) {
-                searchlist.getItems().add(s);
-            }
+        for (String s : arrayList) {
+            searchlist.getItems().add(s);
+        }
         System.out.println(searchlist);
     }
+
     @FXML
     /**
      * This method checks if the text field for creating a playlist is clicked already, if not it will call the method "setTextFieldEditable" to do so.
@@ -294,10 +358,10 @@ public class Controller implements Initializable
             handleEnterNewPlaylist();
         }
     }
+
     /**
-    * This method changes the TextField from being uneditable to being editable and sets the cursor in to the textfield so the user can give input.
-     *
-    */
+     * This method changes the TextField from being uneditable to being editable and sets the cursor in to the textfield so the user can give input.
+     */
     private void setTextFieldEditable() {
         hasFirstClicked = true;
         txtFldEnterNewPlaylistName.setEditable(true);
@@ -306,8 +370,8 @@ public class Controller implements Initializable
 
     @FXML
     /**
-    Method takes the input from the user, stores it in a variable and with this information it calls the method to store the new playlist.
-    Furthermore it will change the title of the TitledPane to the name of the entered playlist.
+     Method takes the input from the user, stores it in a variable and with this information it calls the method to store the new playlist.
+     Furthermore it will change the title of the TitledPane to the name of the entered playlist.
      */
     private void handleEnterNewPlaylist() {
 
@@ -324,22 +388,24 @@ public class Controller implements Initializable
         } else if (titleOfPaneTwo.equals("untitled")) {
             titledPaneTwo.setText(newPlaylistName);
             handleStorePlaylist(newPlaylistName);
-        } else if (titleOfPaneThree.equals( "untitled")) {
+        } else if (titleOfPaneThree.equals("untitled")) {
             titledPaneThree.setText(newPlaylistName);
             handleStorePlaylist(newPlaylistName);
         } else {
             System.out.println("Sorry, there are no spare playlists left, please delete one before creating a new.");
         }
     }
+
     /**
      * Method will store the new playlist in the database in the table tblPlaylist
-     * @param newPlaylistName = the name of the new created playlist
      *
+     * @param newPlaylistName = the name of the new created playlist
      */
     private void handleStorePlaylist(String newPlaylistName) {
         // SQL statement stores a new playlist with 'newPlaylistName' in the DB
-        DB.insertSQL("INSERT INTO tblPlaylist VALUES ('"+newPlaylistName+"')");
+        DB.insertSQL("INSERT INTO tblPlaylist VALUES ('" + newPlaylistName + "')");
     }
+
     //PLAYLIST METHODS:
     @FXML
     /**
@@ -350,6 +416,7 @@ public class Controller implements Initializable
         currentPane = (TitledPane) event.getSource();
         System.out.println("test1 " + currentPane.getText());
     }
+
     @FXML
     /**
      * This method will be invoked if titledPaneOne gets clicked.
@@ -374,6 +441,7 @@ public class Controller implements Initializable
                 "SELECT fldVideoID " +
                 "FROM tblMediaPlayer " +
                 "WHERE fldPlaylistID = '" + currentPane.getText() + "')");
+
         ObservableList<String> videoTitlesOfPlaylist = FXCollections.observableArrayList();
         do {
             String totalPlaylist = DB.getData();
@@ -384,8 +452,11 @@ public class Controller implements Initializable
                 ListViewToUse.setItems(videoTitlesOfPlaylist);
             }
         } while (true);
+        System.out.println("----------------------");
         System.out.println("ListView to use: " + ListViewToUse);
         System.out.println("playlist contains: " + videoTitlesOfPlaylist);
+
+
     }
 
     /**
@@ -434,6 +505,7 @@ public class Controller implements Initializable
         System.out.println("test - fetched videoID: " + useThisVideoID);
 
     }
+
     @FXML
     /**
      * Method that inserts a selected video from the listview to the database based
@@ -445,6 +517,7 @@ public class Controller implements Initializable
         DB.insertSQL("INSERT INTO tblMediaplayer (fldPlaylistID, fldVideoID) " +
                 "VALUES ('" + playlistOnMenuItem1 + "','" + shortSelectedVideoID + "')");
     }
+
     @FXML
     /**
      * Method gets the Text/playlist of the first menuItem and stores it in a variable.
@@ -475,8 +548,7 @@ public class Controller implements Initializable
      * And deletes them in the Database when Method is called by the "Delete" Button
      */
     @FXML
-    private void DeleteSelectedVID()
-    {
+    private void DeleteSelectedVID() {
 
         ManagePlaylists MP = new ManagePlaylists();
 
@@ -513,15 +585,60 @@ public class Controller implements Initializable
      * Method to DELETE a SELECTED Playlist from TitledPanes
      */
     @FXML
-    private void DeleteSelectedPL(){
+    private void DeleteSelectedPL() {
 
         ManagePlaylists MP = new ManagePlaylists();
         MP.set_PLAYLISTID(currentPane.getText());
         System.out.println("--------");
         System.out.println(MP.get_PLAYLISTID());
 
-        DB.deleteSQL("DELETE FROM tblPlaylist WHERE fldPlaylistID = '"+ MP.get_PLAYLISTID() +"'");
+        DB.deleteSQL("DELETE FROM tblPlaylist WHERE fldPlaylistID = '" + MP.get_PLAYLISTID() + "'");
         showStoredPlaylistsOnTitledPane();
+    }
+
+
+    /*
+    Observablelist<String> videoTitlesOfPlaylist from method handleMouseClickShowPlaylist()
+    contains the videos in that specific listview that is chosen on the GUI
+    Tried to add each element to List<MediaPlayer> players but each element gets added again
+    when you click a titledpane (playlist) on the GUI.
+     */
+    private void PlayEachSong() {
+        List<MediaPlayer> players = new ArrayList<MediaPlayer>();
+        for (int i = 0; i < players.size(); i++) {
+            final MediaPlayer player = players.get(i);
+            final MediaPlayer nextPlayer = players.get((i + 1) % players.size());
+            player.setOnEndOfMedia(new Runnable() {
+                @Override
+                public void run() {
+                    mediaV.setMediaPlayer(nextPlayer);
+                    nextPlayer.play();
+                }
+            });
+        }
+
+
+    }
+
+    @FXML
+    private void PlayListSelection() {
+        ArrayList<MediaPlayer> player = new ArrayList<>();
+
+        String SelectedSsong = ListViewPlaylistTwo.getSelectionModel().getSelectedItem();
+        if (SelectedSsong == null || SelectedSsong.isEmpty()) {
+            System.out.println("Nothing Selected");
+        } else {
+            System.out.println("You have selected: " + SelectedSsong);
+        }
+        DB.selectSQL("SELECT fldVideoFilePath FROM tblVideo WHERE (fldVideotitle = '" + SelectedSsong + "')");
+        _FILEPATH = new File(DB.getData()).getPath();
+
+        //adds the chosen video to the media view
+        me = new Media(new File(_FILEPATH).toURI().toString());
+        mp = new MediaPlayer(me);
+        mediaV.setMediaPlayer(mp);
+        mp.setAutoPlay(false);
+        System.out.println(_FILEPATH);
     }
 }
 
