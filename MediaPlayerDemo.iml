@@ -11,24 +11,25 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../../DB Material Week 43" />
+          <root url="file://$USER_HOME$/DB Material Week 43" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$MODULE_DIR$/../../DB Material Week 43" />
+          <root url="file://$USER_HOME$/DB Material Week 43" />
         </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/../../DB Material Week 43" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/DB Material Week 43" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../../JFoenix-master/demo/src/main/java/demos/MainDemo.java" />
+          <root url="file://$USER_HOME$/JFoenix-master/demo/src/main/java/demos/MainDemo.java" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/../../JFoenix-master/demo/src/main/java/demos/MainDemo.java" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/JFoenix-master/demo/src/main/java/demos/MainDemo.java" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="sqljdbc4" level="project" />
   </component>
 </module>
