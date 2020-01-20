@@ -29,7 +29,9 @@ public class DB {
     private static boolean moreData=false;  // from Resultset
     private static boolean pendingData=false; // from select statement
     private static boolean terminated = false;
-
+    public static boolean hasPendingData() {
+        return pendingData;
+    }
     /**
      * Static initializer - no object construction
      */
