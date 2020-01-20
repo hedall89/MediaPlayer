@@ -14,48 +14,74 @@ import javafx.event.ActionEvent;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
 
-public class Controller implements Initializable
-{
+public class Controller implements Initializable {
     //Media
-    @FXML private MediaView mediaV;
-    @FXML private MediaPlayer mp;
-    @FXML private Media me;
+    @FXML
+    private MediaView mediaV;
+    @FXML
+    private MediaPlayer mp;
+    @FXML
+    private Media me;
     //TextFields
-    @FXML private TextField searchfield;
-    @FXML private TextField txtFldEnterNewPlaylistName; // JC
+    @FXML
+    private TextField searchfield;
+    @FXML
+    private TextField txtFldEnterNewPlaylistName; // JC
     //ListView
-    @FXML private ListView<String> searchlist;
-    @FXML private ListView viwer;
-    @FXML private ListView<String> ListViewPlaylistOne; // JC
-    @FXML private ListView<String> ListViewPlaylistTwo; // JC
-    @FXML private ListView<String> ListViewPlaylistThree; // JC
+    @FXML
+    private ListView<String> searchlist;
+    @FXML
+    private ListView viwer;
+    @FXML
+    private ListView<String> ListViewPlaylistOne; // JC
+    @FXML
+    private ListView<String> ListViewPlaylistTwo; // JC
+    @FXML
+    private ListView<String> ListViewPlaylistThree; // JC
     //Buttons
-    @FXML private Button play;
-    @FXML private Button pause;
-    @FXML private Button stop;
-    @FXML private Button speed;
-    @FXML private Button addPlaylist; //JC
+    @FXML
+    private Button play;
+    @FXML
+    private Button pause;
+    @FXML
+    private Button stop;
+    @FXML
+    private Button speed;
+    @FXML
+    private Button addPlaylist; //JC
     //Labels
-    @FXML private Label currenttime;
-    @FXML private Label totaltime;
+    @FXML
+    private Label currenttime;
+    @FXML
+    private Label totaltime;
     //Sliders
-    @FXML private Slider time;
-    @FXML private Slider volumeSlider;
+    @FXML
+    private Slider time;
+    @FXML
+    private Slider volumeSlider;
     //TitledPanes
-    @FXML private TitledPane titledPaneOne; // JC
-    @FXML private TitledPane titledPaneTwo; // JC
-    @FXML private TitledPane titledPaneThree; // JC
+    @FXML
+    private TitledPane titledPaneOne; // JC
+    @FXML
+    private TitledPane titledPaneTwo; // JC
+    @FXML
+    private TitledPane titledPaneThree; // JC
     private TitledPane currentPane; // JC
     //MenuButtons
-    @FXML private MenuButton menuButton; // JC
+    @FXML
+    private MenuButton menuButton; // JC
     //MenuItems
-    @FXML private MenuItem menuItem1; // JC
-    @FXML private MenuItem menuItem2; // JC
-    @FXML private MenuItem menuItem3; // JC
+    @FXML
+    private MenuItem menuItem1; // JC
+    @FXML
+    private MenuItem menuItem2; // JC
+    @FXML
+    private MenuItem menuItem3; // JC
     //Booleans
     private boolean hasFirstClicked; // JC
     //Strings
@@ -67,6 +93,7 @@ public class Controller implements Initializable
     short shortSelectedVideoID; // JC
 
     /////////////////////////////////////////////////////
+
     /**
      * This method is invoked automatically in the beginning. Used for initializing, loading data etc.
      *
@@ -74,8 +101,7 @@ public class Controller implements Initializable
      * @param resources
      */
     @FXML
-    public void initialize(URL location, ResourceBundle resources)
-    {
+    public void initialize(URL location, ResourceBundle resources) {
 
         // Build the path to the location of the media file
         String path = new File("src/sample/media/file_example_MP4_640_3MG.mp4").getAbsolutePath();
@@ -90,9 +116,12 @@ public class Controller implements Initializable
         mp.setAutoPlay(false);
         HandleListofVideos();
 
+
         hasFirstClicked = false; // JC
+
         showStoredPlaylistsOnTitledPane(); // JC
     }
+
 
     /**
      * Method to handle the play Button.
@@ -250,7 +279,11 @@ public class Controller implements Initializable
 
         ObservableList<String> Listview = FXCollections.observableArrayList(arrayListAllVideos);
         searchlist.getItems().addAll(Listview);
+
+
         }
+
+
 
 //    @FXML
 //    /**
@@ -397,7 +430,7 @@ public class Controller implements Initializable
      */
     private void handleStorePlaylist(String newPlaylistName) {
         // SQL statement stores a new playlist with 'newPlaylistName' in the DB
-        DB.insertSQL("INSERT INTO tblPlaylist VALUES (' " + newPlaylistName + " '); ");
+        DB.insertSQL("INSERT INTO tblPlaylist VALUES ('"+ newPlaylistName +"'); ");
 
         // TODO add a try catch? to inform the user in case of duplicate lists.
         //  --if primary key violation message from DB -sout("This Playlist already exists, please choose another title.");
@@ -460,6 +493,7 @@ public class Controller implements Initializable
         System.out.println("ListView to use: " + ListViewToUse);
         System.out.println("playlist contains: " + videoTitlesOfPlaylist);
     }
+
 
     // EDIT/UPDATE PLAYLIST - ATTACH TO GUI:
 
@@ -555,10 +589,49 @@ public class Controller implements Initializable
         DB.insertSQL("INSERT INTO tblMediaplayer (fldPlaylistID, fldVideoID) " +
                 "VALUES ('" + playlistOnMenuItem3 + "','" + shortSelectedVideoID + "')");
     }
+
+
+
+
+
+    private void PlayEachSong() {
+
+        List<MediaPlayer> players = new ArrayList<MediaPlayer>();
+        for (int i = 0; i < players.size(); i++) {
+            final MediaPlayer player     = players.get(i);
+            final MediaPlayer nextPlayer = players.get((i + 1) % players.size());
+            player.setOnEndOfMedia(new Runnable() {
+                @Override public void run() {
+                    mediaV.setMediaPlayer(nextPlayer);
+                    nextPlayer.play();
+                }
+});
+        }
+    }
+
+    @FXML
+    private void PlayListSelection()
+    {
+        ArrayList<MediaPlayer> player = new ArrayList<>();
+
+
+        String SelectedSsong = ListViewPlaylistTwo.getSelectionModel().getSelectedItem();
+        //String _FILEPATH; - JC, moved to start to get access from outside this method
+        if (SelectedSsong == null || SelectedSsong.isEmpty()) {
+            System.out.println("Nothing Selected");
+        } else {
+            System.out.println("You have selected: " + SelectedSsong);
+        }
+        DB.selectSQL("SELECT fldVideoFilePath FROM tblVideo WHERE (fldVideotitle = '" + SelectedSsong + "')");
+        _FILEPATH = new File(DB.getData()).getPath(); // JC - changed from absolute path to (only) path
+
+        //adds the chosen video to the media view
+        me = new Media(new File(_FILEPATH).toURI().toString());
+        mp = new MediaPlayer(me);
+        mediaV.setMediaPlayer(mp);
+        mp.setAutoPlay(false);
+        System.out.println(_FILEPATH);
+
+    }
+
 }
-
-
-
-
-
-
