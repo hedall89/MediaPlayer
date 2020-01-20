@@ -2,6 +2,7 @@ package sample;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.media.*;
 import javafx.scene.control.*;
 import javafx.fxml.FXML;
@@ -10,7 +11,6 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
-import javafx.scene.input.MouseEvent;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -49,11 +49,22 @@ public class Controller implements Initializable
     @FXML private TitledPane titledPaneOne; // JC
     @FXML private TitledPane titledPaneTwo; // JC
     @FXML private TitledPane titledPaneThree; // JC
-    private TitledPane currentPane;
+    private TitledPane currentPane; // JC
+    //MenuButtons
+    @FXML private MenuButton menuButton; // JC
+    //MenuItems
+    @FXML private MenuItem menuItem1; // JC
+    @FXML private MenuItem menuItem2; // JC
+    @FXML private MenuItem menuItem3; // JC
     //Booleans
     private boolean hasFirstClicked; // JC
-    //String
+    //Strings
     String newPlaylistName; // JC
+    String _FILEPATH;
+    String selectedVideoID; // JC
+    String useThisVideoID; // JC
+
+    short shortSelectedVideoID; // JC
 
     /////////////////////////////////////////////////////
     /**
@@ -78,7 +89,6 @@ public class Controller implements Initializable
         // If autoplay is turned of the method play(), stop(), pause() etc controls how/when medias are played
         mp.setAutoPlay(false);
         HandleListofVideos();
-
 
         hasFirstClicked = false; // JC
         showStoredPlaylistsOnTitledPane(); // JC
@@ -272,7 +282,7 @@ public class Controller implements Initializable
     private void showStoredPlaylistsOnTitledPane() {
         // get Array of tblPlaylist content
         DB.selectSQL("SELECT fldPlaylistID FROM tblPlaylist");
-        ArrayList<String> playlistNames = new ArrayList();
+        //ArrayList<String> playlistNames = new ArrayList(); //JC - can be deleted, no use anymore.
 
         boolean noMoreData = false;
         int counter = 1;
@@ -285,17 +295,20 @@ public class Controller implements Initializable
                 switch (counter) {
                     case 1:
                         titledPaneOne.setText(titleQuery);
+                        menuItem1.setText(titleQuery); // JC added
                         break;
                     case 2:
                         titledPaneTwo.setText(titleQuery);
+                        menuItem2.setText(titleQuery); // JC added
                         break;
                     case 3:
                         titledPaneThree.setText(titleQuery);
+                        menuItem3.setText(titleQuery); // JC added
                         break;
                 }
                 counter++;
             }
-        } while (!noMoreData && counter != 4);
+        } while (!noMoreData && counter < 4);
     }
 
     /**
@@ -440,17 +453,19 @@ public class Controller implements Initializable
             } else {
                 videoTitlesOfPlaylist.add(totalPlaylist);
                 ListViewToUse.setItems(videoTitlesOfPlaylist);
+
+
             }
         } while (true);
+        System.out.println("ListView to use: " + ListViewToUse);
+        System.out.println("playlist contains: " + videoTitlesOfPlaylist);
     }
 
     // EDIT/UPDATE PLAYLIST - ATTACH TO GUI:
 
-    // TODO Add method addVideoToPlaylist() in progress - JC
 
-    public void addVideoToPlaylist() {
 
-    }
+
 
     // TODO add method delete VideoFromPlaylist()
 
@@ -462,20 +477,83 @@ public class Controller implements Initializable
     public void HandleSelection() {
 
         String SelectedSong = searchlist.getSelectionModel().getSelectedItem();
-        String _FILEPATH;
+        //String _FILEPATH; - JC, moved to start to get access from outside this method
         if (SelectedSong == null || SelectedSong.isEmpty()) {
             System.out.println("Nothing Selected");
         } else {
             System.out.println("You have selected: " + SelectedSong);
         }
         DB.selectSQL("SELECT fldVideoFilePath FROM tblVideo WHERE (fldVideoTitle = '" + SelectedSong + "')");
-        _FILEPATH = new File(DB.getData()).getAbsolutePath();
+        _FILEPATH = new File(DB.getData()).getPath(); // JC - changed from absolute path to (only) path
 
+        //adds the chosen video to the media view
         me = new Media(new File(_FILEPATH).toURI().toString());
         mp = new MediaPlayer(me);
         mediaV.setMediaPlayer(mp);
         mp.setAutoPlay(false);
         System.out.println(_FILEPATH);
+    }
+
+    @FXML
+    /**
+     * This method takes the filepath of the clicked on video, and fetches the corresponding VideoID from the database.
+     * It stores the result in a string variable.
+     * JC
+     */
+    public void handleChooseVideoToAddToPlaylist() {
+
+        DB.selectSQL("SELECT fldVideoID FROM tblVideo WHERE fldVideoFilepath = '" + _FILEPATH + "'");
+
+        do {
+            selectedVideoID = DB.getData();
+            if (selectedVideoID.equals(DB.NOMOREDATA)) {
+                break;
+            } else {
+                useThisVideoID = selectedVideoID;
+            }
+        } while (true);
+
+        shortSelectedVideoID = Short.valueOf(useThisVideoID); //changes selectedVideoID from string to short (because of data type smallint in DB)
+        System.out.println("test - fetched videoID: " + useThisVideoID);
+        /* JC - get no video ID from your database? check the filepaths in your DB
+        especially backslash + forward slash... (:
+        */
+    }
+
+    @FXML
+    /**
+     * Method gets the Text/playlist of the first menuItem and stores it in a variable.
+     * Afterwards it inserts the playlist and selected video in the tblMediaplayer in the DB.
+     * JC
+     */
+    public void handleGetPlaylistToStoreIn1() {
+        String playlistOnMenuItem1 = menuItem1.getText();
+        System.out.println("test: got the text of menuitem?: " + playlistOnMenuItem1);
+
+        DB.insertSQL("INSERT INTO tblMediaplayer (fldPlaylistID, fldVideoID) " +
+                "VALUES ('" + playlistOnMenuItem1 + "','" + shortSelectedVideoID + "')");
+    }
+
+    @FXML
+    /**
+     * JC
+     */
+    public void handleGetPlaylistToStoreIn2() {
+        String playlistOnMenuItem2 = menuItem2.getText();
+
+        DB.insertSQL("INSERT INTO tblMediaplayer (fldPlaylistID, fldVideoID) " +
+                "VALUES ('" + playlistOnMenuItem2 + "','" + shortSelectedVideoID + "')");
+    }
+
+    @FXML
+    /**
+     * JC
+     */
+    public void handleGetPlaylistToStoreIn3() {
+        String playlistOnMenuItem3 = menuItem3.getText();
+
+        DB.insertSQL("INSERT INTO tblMediaplayer (fldPlaylistID, fldVideoID) " +
+                "VALUES ('" + playlistOnMenuItem3 + "','" + shortSelectedVideoID + "')");
     }
 }
 
